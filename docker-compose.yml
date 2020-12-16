@@ -1,0 +1,62 @@
+version: '3.0'
+services:
+  nginx:
+    container_name: laradocker_nginx
+    image: webdevops/php-nginx:7.4-alpine
+    ports:
+      - 8000:80 
+    volumes:
+      - $PWD/nginx:/app/
+     # - $PWD/nginx/etc/crontab:/etc/crontab
+    depends_on: 
+      - mariadb
+      - phpmyadmin
+    restart: always
+    networks: 
+      - laradocker
+
+  configuration:
+    container_name: laradocker_configuration
+    image: guibressan/ubuntu-composer:1.1
+    volumes:
+      - $PWD/nginx:/app/
+    #  - $PWD/nginx/etc/crontab:/etc/crontab
+    command: bash -c "cd /app/scripts && chmod 700 init.sh && ./init.sh"
+    depends_on: 
+      - mariadb
+      - phpmyadmin
+    networks: 
+      - laradocker
+  
+  mariadb:
+    container_name: laradocker_mariadb
+    image: mariadb:10.5.8-focal
+    volumes: 
+      - $PWD/db:/var/lib/mysql
+    environment: 
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=batata
+      - MYSQL_DATABASE=laradocker
+      - MYSQL_ROOT_PASSWORD=batata
+    ports: 
+      - 3307:3306
+    restart: always
+    networks: 
+      - laradocker
+  
+  phpmyadmin:
+    container_name: laradocker_phpmyadmin
+    image: phpmyadmin:5.0.4
+    environment: 
+      - PMA_HOST=laradocker_mariadb
+    ports: 
+      - 82:80
+    depends_on: 
+      - mariadb
+    networks: 
+      - laradocker
+
+networks:
+  laradocker:
+    external:
+      name: laradocker
