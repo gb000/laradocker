@@ -1,9 +1,16 @@
-Modelo de infraestrutura dockerizada para Laravel+Mariadb+PhpMyAdmin+Nginx
+# Laradocker: Modelo de infraestrutura dockerizada para Laravel+Mariadb+PhpMyAdmin+Nginx
 
-Para subir os containers execute o script up.sh
+* Para subir os containers
 
-Para derrubar os containers execute o script down.sh
+```bash
+./up.sh
+```
 
-Porta Nginx: 8000
-Porta MariaDB: 3307
-Porta PhpMyAdmin: 82
+* Para derrubar os containers
+```bash
+./down.sh
+```
+
+* Porta padrão Nginx: 8000
+* Porta MariaDB: 3307
+* Porta PhpMyAdmin: 82
